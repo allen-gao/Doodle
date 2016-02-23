@@ -1,11 +1,14 @@
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 public class Doodle extends JFrame {
 	
-	private int width = 600;
-	private int height = 600;
+	private static int width = 600;
+	private static int height = 600;
+	
+	private static GamePanel gamePanel;
 	
 	public Doodle() {
 		super();
@@ -18,6 +21,14 @@ public class Doodle extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		Doodle frame = new Doodle();
+		
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				Doodle frame = new Doodle();
+				gamePanel = new GamePanel();
+				frame.add(gamePanel);
+			}
+		});
 	}
 }
