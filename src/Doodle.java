@@ -27,7 +27,7 @@ public class Doodle extends JFrame {
 			public void run() {
 				Doodle frame = new Doodle();
 				gamePanel = new GamePanel();
-				frame.add(gamePanel);
+				frame.setContentPane(gamePanel);
 			}
 		});
 	}

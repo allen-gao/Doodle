@@ -10,5 +10,7 @@ public class GamePanel extends JPanel {
 		this.add(new CenterPanel(), BorderLayout.CENTER);
 		this.add(new WestPanel(),  BorderLayout.WEST);
 		this.add(new NorthPanel(), BorderLayout.NORTH);
+		
+		this.setBackground(Color.RED);
 	}
 }
