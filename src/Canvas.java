@@ -1,5 +1,7 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -52,12 +54,13 @@ public class Canvas extends JPanel implements Observer {
 	}
 	
 	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;
+		super.paintComponent(g2);
 		for (int i = 0; i < drawnLines.size(); i++) {
-			System.out.println(i);
 			Line line = drawnLines.get(i);
-			g.setColor(line.getColor());
-			g.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
+			g2.setColor(line.getColor());
+			g2.setStroke(new BasicStroke(10));
+			g2.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
 		}
 	}
 

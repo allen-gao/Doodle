@@ -1,3 +1,4 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +8,7 @@ public class Model extends Observable {
 	
 	private ArrayList<Color> colorArray;
 	private Color currentColor;
+	private ArrayList<BasicStroke> strokeArray;
 	
 	public Model() {
 		colorArray = new ArrayList<Color>(Arrays.asList(
@@ -25,6 +27,12 @@ public class Model extends Observable {
 				Color.WHITE)
 		);
 		
+		strokeArray = new ArrayList<BasicStroke>();
+		strokeArray.add(new BasicStroke(1));
+		strokeArray.add(new BasicStroke(3));
+		strokeArray.add(new BasicStroke(5));
+		strokeArray.add(new BasicStroke(7));
+		strokeArray.add(new BasicStroke(9));
 	}
 	
 	public ArrayList<Color> getColorArray() {
@@ -39,6 +47,10 @@ public class Model extends Observable {
 		this.currentColor = currentColor;
 		setChanged();
 		notifyObservers();
+	}
+	
+	public ArrayList<BasicStroke> getStrokeArray() {
+		return strokeArray;
 	}
 	
 }
