@@ -17,10 +17,7 @@ public class Canvas extends JPanel {
 	
 	
 	public Canvas() {
-		super();
-		//this.setOpaque(true);
-		//this.setBackground(Color.WHITE);
-		//this.setBorder(BorderFactory.createLoweredBevelBorder());
+		this.setBackground(Color.WHITE);
 		
 		MouseAdapter mouseAdapter = new MouseAdapter() {
 			public void mouseDragged(MouseEvent e) {
@@ -47,6 +44,7 @@ public class Canvas extends JPanel {
 	}
 	
 	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		g.setColor(Color.BLACK);
 		g.drawLine(lastX, lastY, x, y);
 	}
