@@ -9,6 +9,7 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
 public class WestPanel extends JPanel implements Observer {
@@ -36,6 +37,7 @@ public class WestPanel extends JPanel implements Observer {
 			});
 			this.add(colorButton);
 		}
+
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -44,7 +46,6 @@ public class WestPanel extends JPanel implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
 		
 	}
 }

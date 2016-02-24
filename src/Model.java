@@ -37,6 +37,8 @@ public class Model extends Observable {
 
 	public void setCurrentColor(Color currentColor) {
 		this.currentColor = currentColor;
+		setChanged();
+		notifyObservers();
 	}
 	
 }

@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -15,13 +16,15 @@ public class Canvas extends JPanel implements Observer {
 	private int lastX;
 	private int lastY;
 	private boolean startDraw = true;
+	private Color drawColor;
+	private ArrayList<Line> drawnLines;
 	
 	
 	public Canvas(Model model) {
 		this.model = model;
 		model.addObserver(this);
-		
 		this.setBackground(Color.WHITE);
+		this.drawnLines = new ArrayList<Line>();
 		
 		MouseAdapter mouseAdapter = new MouseAdapter() {
 			public void mouseDragged(MouseEvent e) {
@@ -36,6 +39,7 @@ public class Canvas extends JPanel implements Observer {
 				}
 				x = e.getX();
 				y = e.getY();
+				drawnLines.add(new Line(x, y, lastX, lastY, drawColor));
 				repaint();
 			}
 			
@@ -49,13 +53,16 @@ public class Canvas extends JPanel implements Observer {
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.setColor(Color.BLACK);
-		g.drawLine(lastX, lastY, x, y);
+		for (int i = 0; i < drawnLines.size(); i++) {
+			System.out.println(i);
+			Line line = drawnLines.get(i);
+			g.setColor(line.getColor());
+			g.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
+		}
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
+		this.drawColor = model.getCurrentColor();
 	}
 }
