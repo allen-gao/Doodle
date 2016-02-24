@@ -2,13 +2,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Observable;
+import java.util.Observer;
 
-import javax.swing.BorderFactory;
-import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
-public class Canvas extends JPanel {
+public class Canvas extends JPanel implements Observer {
 	
+	private Model model;
 	private int x;
 	private int y;
 	private int lastX;
@@ -16,7 +17,10 @@ public class Canvas extends JPanel {
 	private boolean startDraw = true;
 	
 	
-	public Canvas() {
+	public Canvas(Model model) {
+		this.model = model;
+		model.addObserver(this);
+		
 		this.setBackground(Color.WHITE);
 		
 		MouseAdapter mouseAdapter = new MouseAdapter() {
@@ -47,5 +51,11 @@ public class Canvas extends JPanel {
 		super.paintComponent(g);
 		g.setColor(Color.BLACK);
 		g.drawLine(lastX, lastY, x, y);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -9,6 +9,7 @@ public class Doodle extends JFrame {
 	private static int height = 600;
 	
 	private static GamePanel gamePanel;
+	private static Model model;
 	
 	public Doodle() {
 		super();
@@ -25,8 +26,9 @@ public class Doodle extends JFrame {
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Doodle frame = new Doodle();
-				gamePanel = new GamePanel();
+				Doodle frame = new Doodle(); // main
+				model = new Model();
+				gamePanel = new GamePanel(model); // view/controller
 				frame.setContentPane(gamePanel);
 			}
 		});
