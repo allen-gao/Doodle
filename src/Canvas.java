@@ -20,12 +20,14 @@ public class Canvas extends JPanel implements Observer {
 	private boolean startDraw = true;
 	private Color drawColor;
 	private ArrayList<Line> drawnLines;
-	
+	private BasicStroke currentStroke;
 	
 	public Canvas(Model model) {
 		this.model = model;
 		model.addObserver(this);
 		this.setBackground(Color.WHITE);
+		this.drawColor = model.getCurrentColor();
+		this.currentStroke = model.getCurrentStroke();
 		this.drawnLines = new ArrayList<Line>();
 		
 		MouseAdapter mouseAdapter = new MouseAdapter() {
@@ -41,7 +43,7 @@ public class Canvas extends JPanel implements Observer {
 				}
 				x = e.getX();
 				y = e.getY();
-				drawnLines.add(new Line(x, y, lastX, lastY, drawColor));
+				drawnLines.add(new Line(x, y, lastX, lastY, drawColor, currentStroke));
 				repaint();
 			}
 			
@@ -59,7 +61,7 @@ public class Canvas extends JPanel implements Observer {
 		for (int i = 0; i < drawnLines.size(); i++) {
 			Line line = drawnLines.get(i);
 			g2.setColor(line.getColor());
-			g2.setStroke(new BasicStroke(10));
+			g2.setStroke(line.getStroke());
 			g2.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
 		}
 	}
@@ -67,5 +69,6 @@ public class Canvas extends JPanel implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		this.drawColor = model.getCurrentColor();
+		this.currentStroke = model.getCurrentStroke();
 	}
 }

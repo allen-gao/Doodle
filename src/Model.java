@@ -9,6 +9,7 @@ public class Model extends Observable {
 	private ArrayList<Color> colorArray;
 	private Color currentColor;
 	private ArrayList<BasicStroke> strokeArray;
+	private BasicStroke currentStroke;
 	
 	public Model() {
 		colorArray = new ArrayList<Color>(Arrays.asList(
@@ -26,6 +27,7 @@ public class Model extends Observable {
 				Color.RED,
 				Color.WHITE)
 		);
+		currentColor = colorArray.get(0);
 		
 		strokeArray = new ArrayList<BasicStroke>();
 		strokeArray.add(new BasicStroke(1));
@@ -33,6 +35,7 @@ public class Model extends Observable {
 		strokeArray.add(new BasicStroke(5));
 		strokeArray.add(new BasicStroke(7));
 		strokeArray.add(new BasicStroke(9));
+		currentStroke = strokeArray.get(0);
 	}
 	
 	public ArrayList<Color> getColorArray() {
@@ -51,6 +54,16 @@ public class Model extends Observable {
 	
 	public ArrayList<BasicStroke> getStrokeArray() {
 		return strokeArray;
+	}
+
+	public BasicStroke getCurrentStroke() {
+		return currentStroke;
+	}
+
+	public void setCurrentStroke(BasicStroke currentStroke) {
+		this.currentStroke = currentStroke;
+		setChanged();
+		notifyObservers();
 	}
 	
 }

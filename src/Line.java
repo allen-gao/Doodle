@@ -1,3 +1,4 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
 
 public class Line {
@@ -6,14 +7,16 @@ public class Line {
 	private int y1;
 	private int y2;
 	private Color color;
-
+	private BasicStroke stroke;
 	
-	public Line(int x1, int y1, int x2, int y2, Color color) {
+	
+	public Line(int x1, int y1, int x2, int y2, Color color, BasicStroke stroke) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.x2 = x2;
 		this.y2 = y2;
 		this.color = color;
+		this.stroke = stroke;
 	}
 	
 	public int getX1() {
@@ -46,5 +49,13 @@ public class Line {
 	}
 	public void setColor(Color color) {
 		this.color = color;
+	}
+
+	public BasicStroke getStroke() {
+		return stroke;
+	}
+
+	public void setStroke(BasicStroke stroke) {
+		this.stroke = stroke;
 	}
 }
