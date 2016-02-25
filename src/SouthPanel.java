@@ -43,7 +43,7 @@ public class SouthPanel extends JPanel implements Observer {
 					public void actionPerformed(ActionEvent evt) {
 						int newIndex = model.getLineIndex() + 5;
 						if (model.getLineIndexMax() <= newIndex) {
-							newIndex = model.getLineIndex();
+							model.setLineIndex(model.getLineIndexMax());
 							sliderTimer.stop();
 						}
 						else {
