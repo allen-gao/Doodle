@@ -43,9 +43,30 @@ public class Canvas extends JPanel implements Observer {
 				}
 				x = e.getX();
 				y = e.getY();
+				/*
 				ArrayList<Line> lastList = drawnLines.get(drawnLines.size() - 1);
 				lastList.add(new Line(x, y, lastX, lastY, drawColor, currentStroke));
 				model.setDrawnLines(drawnLines);
+				*/
+				
+				ArrayList<Line> lastList;
+				if (model.getLineIndex() == model.getLineIndexMax()) { // no overwriting
+					lastList = drawnLines.get(drawnLines.size() - 1);
+					lastList.add(new Line(x, y, lastX, lastY, drawColor, currentStroke));
+					model.setDrawnLines(drawnLines);
+				}
+				else { // overwriting
+					int lineIndex = model.getLineIndex();
+					int lineIndexMax = model.getLineIndexMax();
+					int strokeIndex = (int) Math.floor(lineIndex / 100) + 1; // completed lines
+					int partialPercentage = lineIndex % 100;
+					if (lineIndex == lineIndexMax) {
+						partialPercentage = 100;
+						strokeIndex -= 1;
+					}
+				}
+				
+				
 				repaint();
 			}
 			

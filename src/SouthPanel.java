@@ -52,10 +52,7 @@ public class SouthPanel extends JPanel implements Observer {
 					}
 				};
 				sliderTimer = new Timer(delay, taskPerformer);
-				sliderTimer.start();
-				
-				
-				
+				sliderTimer.start();				
 			}
 		});
 		this.add(play);
