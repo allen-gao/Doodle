@@ -67,38 +67,30 @@ public class Canvas extends JPanel implements Observer {
 		super.paintComponent(g2);
 		int lineIndex = model.getLineIndex();
 		int lineIndexMax = model.getLineIndexMax();
-		int strokeIndex = (int) Math.floor(lineIndex / 100); // completed lines
+		int strokeIndex = (int) Math.floor(lineIndex / 100) + 1; // completed lines
 		int partialPercentage = lineIndex % 100;
 		if (lineIndex == lineIndexMax) {
-			partialPercentage = 0;
-			//strokeIndex -= 1;
+			partialPercentage = 100;
+			strokeIndex -= 1;
 		}
 		System.out.println(strokeIndex);
 		System.out.println(partialPercentage);
 		int partialIndex;
-		for (int i = 0; i <= strokeIndex; i++) {
-			
-			
-			
-			ArrayList<Line> lineList;
-			
-			if (i == strokeIndex) {
-				lineList = drawnLines.get(i);
-				partialIndex = (int) Math.floor(partialPercentage * lineList.size() / 100);
-			}
-			else {
+		for (int i = 0; i < strokeIndex; i++) {	
+			ArrayList<Line> lineList = drawnLines.get(i);
+			if (i != strokeIndex - 1) {
 				partialIndex = lineList.size();
 			}
-			
-			
-			
+			else {
+				partialIndex = (int) Math.floor(partialPercentage * lineList.size() / 100);
+			}	
 			for (int j = 0; j < partialIndex; j++) {
 				Line line = lineList.get(j);
 				g2.setColor(line.getColor());
 				g2.setStroke(line.getStroke());
 				g2.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
 			}
-		}
+		}	
 	}
 
 	@Override

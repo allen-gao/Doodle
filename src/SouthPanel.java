@@ -38,19 +38,11 @@ public class SouthPanel extends JPanel implements Observer {
 		slider.setEnabled(false);
 		slider.setPaintTicks(false);
 		slider.setMajorTickSpacing(100);
-		//slider.setMaximum(500);
 		slider.addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
-				/*
-				if (slider.getValue() % 100 < 15 || slider.getValue() % 100 > 85) {
-					slider.setValue((slider.getValue() + 50) / 100 * 100); // round to nearest 100
-				}
-				*/
 				model.setLineIndex(slider.getValue());
-				System.out.println("Slider Value:");
-				System.out.println(slider.getValue());
 			}
 			
 		});
