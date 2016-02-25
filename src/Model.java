@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
 
+import javax.swing.JButton;
+
 public class Model extends Observable {
 	
 	private ArrayList<Color> colorArray;
 	private Color currentColor;
 	private ArrayList<BasicStroke> strokeArray;
 	private BasicStroke currentStroke;
+	private JButton currentStrokeButton;
 	
 	public Model() {
 		colorArray = new ArrayList<Color>(Arrays.asList(
@@ -62,6 +65,16 @@ public class Model extends Observable {
 
 	public void setCurrentStroke(BasicStroke currentStroke) {
 		this.currentStroke = currentStroke;
+		setChanged();
+		notifyObservers();
+	}
+
+	public JButton getCurrentStrokeButton() {
+		return currentStrokeButton;
+	}
+
+	public void setCurrentStrokeButton(JButton currentStrokeButton) {
+		this.currentStrokeButton = currentStrokeButton;
 		setChanged();
 		notifyObservers();
 	}

@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 public class WestPanel extends JPanel implements Observer {
 	
@@ -58,9 +59,13 @@ public class WestPanel extends JPanel implements Observer {
 			BasicStroke stroke = this.strokeArray.get(i);
 			StrokeButton strokeButton = new StrokeButton(stroke);
 			strokeButton.setPreferredSize(new Dimension(50, 20));
-			strokeButton.setBackground(Color.LIGHT_GRAY);
+			strokeButton.setBackground(Color.WHITE);
 			strokeButton.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
+					if (model.getCurrentStrokeButton() != null) {
+						model.getCurrentStrokeButton().setBorder(BorderFactory.createEmptyBorder());
+					}
+					model.setCurrentStrokeButton(strokeButton);
 					model.setCurrentStroke(stroke);
 				}
 			});
@@ -76,5 +81,6 @@ public class WestPanel extends JPanel implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		colorChooser.setBackground(model.getCurrentColor());
+		model.getCurrentStrokeButton().setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	}
 }

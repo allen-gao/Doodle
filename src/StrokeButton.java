@@ -3,14 +3,17 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.border.Border;
 
 public class StrokeButton extends JButton {
-	
 	BasicStroke stroke;
 	
 	public StrokeButton(BasicStroke stroke) {
 		this.stroke = stroke;
+		Border emptyBorder = BorderFactory.createEmptyBorder();
+		this.setBorder(emptyBorder);
 	}
 	
 	public void paintComponent(Graphics g) {
