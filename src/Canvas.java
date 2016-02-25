@@ -19,7 +19,7 @@ public class Canvas extends JPanel implements Observer {
 	private int lastY;
 	private boolean startDraw = true;
 	private Color drawColor;
-	private ArrayList<Line> drawnLines;
+	private ArrayList<ArrayList<Line>> drawnLines;
 	private BasicStroke currentStroke;
 	
 	public Canvas(Model model) {
@@ -28,7 +28,7 @@ public class Canvas extends JPanel implements Observer {
 		this.setBackground(Color.WHITE);
 		this.drawColor = model.getCurrentColor();
 		this.currentStroke = model.getCurrentStroke();
-		this.drawnLines = new ArrayList<Line>();
+		this.drawnLines = new ArrayList<ArrayList<Line>>();
 		
 		MouseAdapter mouseAdapter = new MouseAdapter() {
 			public void mouseDragged(MouseEvent e) {
@@ -43,12 +43,19 @@ public class Canvas extends JPanel implements Observer {
 				}
 				x = e.getX();
 				y = e.getY();
-				drawnLines.add(new Line(x, y, lastX, lastY, drawColor, currentStroke));
+				ArrayList<Line> lastList = drawnLines.get(drawnLines.size() - 1);
+				lastList.add(new Line(x, y, lastX, lastY, drawColor, currentStroke));
+				model.setDrawnLines(drawnLines);
 				repaint();
+			}
+			
+			public void mousePressed(MouseEvent e) {
+				drawnLines.add(new ArrayList<Line>());
 			}
 			
 			public void mouseReleased(MouseEvent e) {
 				startDraw = true;
+				model.setDrawnLines(drawnLines);
 			}
 		};
 		this.addMouseListener(mouseAdapter);
@@ -58,16 +65,38 @@ public class Canvas extends JPanel implements Observer {
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		super.paintComponent(g2);
-		for (int i = 0; i < drawnLines.size(); i++) {
-			Line line = drawnLines.get(i);
-			g2.setColor(line.getColor());
-			g2.setStroke(line.getStroke());
-			g2.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
+		int lineIndex = model.getLineIndex();
+		int lineIndexMax = model.getLineIndexMax();
+		int strokeIndex = (int) Math.floor(lineIndex / 100); // completed lines
+		int partialPercentage = lineIndex % 100;
+		if (lineIndex == lineIndexMax) {
+			partialPercentage = 100;
+		}
+		System.out.println(strokeIndex);
+		System.out.println(partialPercentage);
+		int partialIndex;
+		for (int i = 0; i < strokeIndex; i++) {
+			ArrayList<Line> lineList = drawnLines.get(i);
+			if (i == strokeIndex - 1) {
+				partialIndex = (int) Math.floor(partialPercentage * lineList.size() / 100);
+			}
+			else {
+				partialIndex = lineList.size();
+			}
+			for (int j = 0; j < partialIndex; j++) {
+				Line line = lineList.get(j);
+				g2.setColor(line.getColor());
+				g2.setStroke(line.getStroke());
+				g2.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
+			}
 		}
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
+		if (arg == "lineIndex") {
+			repaint();
+		}
 		this.drawColor = model.getCurrentColor();
 		this.currentStroke = model.getCurrentStroke();
 	}

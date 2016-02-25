@@ -27,8 +27,8 @@ public class Doodle extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Doodle frame = new Doodle(); // main
-				model = new Model();
-				gamePanel = new GamePanel(model); // view/controller
+				model = new Model(); // model
+				gamePanel = new GamePanel(model); // view + controller
 				frame.setContentPane(gamePanel);
 			}
 		});

@@ -13,6 +13,9 @@ public class Model extends Observable {
 	private ArrayList<BasicStroke> strokeArray;
 	private BasicStroke currentStroke;
 	private JButton currentStrokeButton;
+	private ArrayList<ArrayList<Line>> drawnLines;
+	private int lineIndex;
+	private int lineIndexMax;
 	
 	public Model() {
 		colorArray = new ArrayList<Color>(Arrays.asList(
@@ -77,6 +80,36 @@ public class Model extends Observable {
 		this.currentStrokeButton = currentStrokeButton;
 		setChanged();
 		notifyObservers();
+	}
+
+	public ArrayList<ArrayList<Line>> getDrawnLines() {
+		return drawnLines;
+	}
+
+	public void setDrawnLines(ArrayList<ArrayList<Line>> drawnLines) {
+		this.drawnLines = drawnLines;
+		setChanged();
+		notifyObservers(this.drawnLines);
+		this.lineIndex = this.drawnLines.size() * 100;
+	}
+
+	public int getLineIndex() {
+		return lineIndex;
+	}
+
+	public void setLineIndex(int lineIndex) {
+		this.lineIndex = lineIndex;
+		setChanged();
+		notifyObservers("lineIndex");
+	}
+
+	public int getLineIndexMax() {
+		return lineIndexMax;
+	}
+
+	public void setLineIndexMax(int lineIndexMax) {
+		// warning: infinite recursion if notifying SouthPanel
+		this.lineIndexMax = lineIndexMax;
 	}
 	
 }
