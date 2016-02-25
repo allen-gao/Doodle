@@ -1,7 +1,11 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -9,6 +13,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
@@ -19,6 +24,7 @@ public class SouthPanel extends JPanel implements Observer {
 	private Model model;
 	private int ticks = 0;
 	private JSlider slider;
+	private Timer sliderTimer;
 	
 	public SouthPanel(Model model) {
 		this.model = model;
@@ -30,6 +36,28 @@ public class SouthPanel extends JPanel implements Observer {
 		
 		
 		JButton play = new JButton("Play");
+		play.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int delay = 50; //milliseconds
+				ActionListener taskPerformer = new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						int newIndex = model.getLineIndex() + 5;
+						if (model.getLineIndexMax() <= newIndex) {
+							newIndex = model.getLineIndex();
+							sliderTimer.stop();
+						}
+						else {
+							model.setLineIndex(newIndex);
+						}
+					}
+				};
+				sliderTimer = new Timer(delay, taskPerformer);
+				sliderTimer.start();
+				
+				
+				
+			}
+		});
 		this.add(play);
 		
 		slider = new JSlider(JSlider.HORIZONTAL, 0, 0, 0);
@@ -39,19 +67,27 @@ public class SouthPanel extends JPanel implements Observer {
 		slider.setPaintTicks(false);
 		slider.setMajorTickSpacing(100);
 		slider.addChangeListener(new ChangeListener() {
-
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				model.setLineIndex(slider.getValue());
 			}
-			
 		});
 		this.add(slider);
-		
+	
 		JButton start = new JButton("Start");
+		start.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				model.setLineIndex(0);
+			}
+		});
 		this.add(start);
 		
 		JButton end = new JButton("End");
+		end.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				model.setLineIndex(model.getLineIndexMax());
+			}
+		});
 		this.add(end);
 	}
 	
@@ -71,6 +107,8 @@ public class SouthPanel extends JPanel implements Observer {
 			slider.setEnabled(this.ticks != 0);
 			slider.setPaintTicks(this.ticks != 0);
 		}
-		
+		if (arg == "lineIndex") {
+			slider.setValue(model.getLineIndex());
+		}
 	}
 }
