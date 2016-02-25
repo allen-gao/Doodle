@@ -47,7 +47,9 @@ public class WestPanel extends JPanel implements Observer {
 		colorChooser.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				Color color = JColorChooser.showDialog(self, "Choose a colour", model.getCurrentColor());
-				model.setCurrentColor(color);
+				if (color != null) {
+					model.setCurrentColor(color);
+				}
 			}
 		});
 		colorChooser.setBackground(model.getCurrentColor());
@@ -70,6 +72,9 @@ public class WestPanel extends JPanel implements Observer {
 				}
 			});
 			this.add(strokeButton);
+			if (i == 0) {
+				model.setCurrentStrokeButton(strokeButton);
+			}
 		}
 
 	}
