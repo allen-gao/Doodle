@@ -56,14 +56,8 @@ public class Canvas extends JPanel implements Observer {
 					model.setDrawnLines(drawnLines);
 				}
 				else { // overwriting
-					int lineIndex = model.getLineIndex();
-					int lineIndexMax = model.getLineIndexMax();
-					int strokeIndex = (int) Math.floor(lineIndex / 100) + 1; // completed lines
-					int partialPercentage = lineIndex % 100;
-					if (lineIndex == lineIndexMax) {
-						partialPercentage = 100;
-						strokeIndex -= 1;
-					}
+					int strokeIndex = model.getLastStrokeIndex();
+					int lineIndex = model.getLastLineIndex();
 				}
 				
 				
@@ -99,6 +93,7 @@ public class Canvas extends JPanel implements Observer {
 		int partialIndex;
 		for (int i = 0; i < strokeIndex; i++) {	
 			ArrayList<Line> lineList = drawnLines.get(i);
+			model.setLastStrokeIndex(i);
 			if (i != strokeIndex - 1) {
 				partialIndex = lineList.size();
 			}
@@ -107,6 +102,7 @@ public class Canvas extends JPanel implements Observer {
 			}	
 			for (int j = 0; j < partialIndex; j++) {
 				Line line = lineList.get(j);
+				model.setLastLineIndex(j);
 				g2.setColor(line.getColor());
 				g2.setStroke(line.getStroke());
 				g2.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());

@@ -16,6 +16,8 @@ public class Model extends Observable {
 	private ArrayList<ArrayList<Line>> drawnLines;
 	private int lineIndex;
 	private int lineIndexMax;
+	private int lastStrokeIndex;
+	private int lastLineIndex;
 	
 	public Model() {
 		colorArray = new ArrayList<Color>(Arrays.asList(
@@ -110,6 +112,22 @@ public class Model extends Observable {
 	public void setLineIndexMax(int lineIndexMax) {
 		// warning: infinite recursion if notifying SouthPanel
 		this.lineIndexMax = lineIndexMax;
+	}
+
+	public int getLastStrokeIndex() {
+		return lastStrokeIndex;
+	}
+
+	public void setLastStrokeIndex(int lastStrokeIndex) {
+		this.lastStrokeIndex = lastStrokeIndex;
+	}
+
+	public int getLastLineIndex() {
+		return lastLineIndex;
+	}
+
+	public void setLastLineIndex(int lastLineIndex) {
+		this.lastLineIndex = lastLineIndex;
 	}
 	
 }
