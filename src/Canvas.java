@@ -43,11 +43,6 @@ public class Canvas extends JPanel implements Observer {
 				}
 				x = e.getX();
 				y = e.getY();
-				/*
-				ArrayList<Line> lastList = drawnLines.get(drawnLines.size() - 1);
-				lastList.add(new Line(x, y, lastX, lastY, drawColor, currentStroke));
-				model.setDrawnLines(drawnLines);
-				*/
 				
 				ArrayList<Line> lastList;
 				if (model.getLineIndex() == model.getLineIndexMax()) { // no overwriting
@@ -58,6 +53,12 @@ public class Canvas extends JPanel implements Observer {
 				else { // overwriting
 					int strokeIndex = model.getLastStrokeIndex();
 					int lineIndex = model.getLastLineIndex();
+					ArrayList<ArrayList<Line>> drawnLines = model.getDrawnLines();
+					drawnLines.subList(strokeIndex + 1, drawnLines.size()).clear();
+					ArrayList<Line> lastStroke = drawnLines.get(strokeIndex);
+					lastStroke.subList(lineIndex + 1, lastStroke.size()).clear();
+					drawnLines.add(new ArrayList<Line>());
+					model.setDrawnLines(drawnLines);
 				}
 				
 				
