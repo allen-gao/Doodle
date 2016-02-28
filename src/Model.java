@@ -143,4 +143,8 @@ public class Model extends Observable {
 		gamePanel.resized();
 	}
 	
+	public void resizedInstant() { // whenever the event triggers
+		gamePanel.resizedInstant();
+	}
+	
 }

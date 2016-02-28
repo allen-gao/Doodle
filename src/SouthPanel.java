@@ -22,7 +22,13 @@ public class SouthPanel extends JPanel implements Observer {
 	
 	private Model model;
 	private int ticks = 0;
+	
+	private int defaultWindowWidth = 584;
 	private JSlider slider;
+	private int sliderButtonWidthOffset = 350;
+	private int sliderWidthDefault = defaultWindowWidth - sliderButtonWidthOffset;
+	private int sliderHeight = 40;
+	
 	private Timer sliderTimer;
 	
 	public SouthPanel(Model model) {
@@ -80,7 +86,7 @@ public class SouthPanel extends JPanel implements Observer {
 		
 		slider = new JSlider(JSlider.HORIZONTAL, 0, 0, 0);
 		slider.setBackground(Color.WHITE);
-		slider.setPreferredSize(new Dimension(350, 40));
+		slider.setPreferredSize(new Dimension(sliderWidthDefault, sliderHeight));
 		slider.setEnabled(false);
 		slider.setPaintTicks(false);
 		slider.setMajorTickSpacing(100);
@@ -107,6 +113,10 @@ public class SouthPanel extends JPanel implements Observer {
 			}
 		});
 		this.add(end);
+	}
+	
+	public void resized() {
+		slider.setPreferredSize(new Dimension(this.getWidth() - sliderButtonWidthOffset, sliderHeight));
 	}
 	
 	public void paintComponent(Graphics g) {

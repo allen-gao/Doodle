@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,9 +39,11 @@ public class Doodle extends JFrame {
 				gamePanel = new GamePanel(model); // view + controller
 				model.setGamePanel(gamePanel);
 				frame.setContentPane(gamePanel);
+				frame.setMinimumSize(new Dimension(500, 450));
 				
 				frame.addComponentListener(new ComponentAdapter() {
 					public void componentResized(ComponentEvent e) {
+						model.resizedInstant();
 						if (resizeTimer == null) {
 							ActionListener taskPerformer = new ActionListener() {
 								public void actionPerformed(ActionEvent evt) {
