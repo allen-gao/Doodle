@@ -1,15 +1,19 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class NorthPanel extends JPanel implements Observer {
 	
@@ -30,7 +34,19 @@ public class NorthPanel extends JPanel implements Observer {
 		menuBar.add(fileMenu);
 		JMenuItem saveItem = new JMenuItem("Save");
 		fileMenu.add(saveItem);
-		JMenuItem loadItem = new JMenuItem("Load");
+		JMenuItem loadItem = new JMenuItem(new AbstractAction("Load") {
+		    public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+						"JPG & GIF Images", "jpg", "gif");
+				chooser.setFileFilter(filter);
+				
+				int returnVal = chooser.showOpenDialog(chooser);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
+				}
+		    }
+		});
 		fileMenu.add(loadItem);
 		
 		JMenu viewMenu = new JMenu("View");

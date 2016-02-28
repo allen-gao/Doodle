@@ -89,8 +89,6 @@ public class Canvas extends JPanel implements Observer {
 			partialPercentage = 100;
 			strokeIndex -= 1;
 		}
-		System.out.println(strokeIndex);
-		System.out.println(partialPercentage);
 		int partialIndex;
 		for (int i = 0; i < strokeIndex; i++) {	
 			ArrayList<Line> lineList = drawnLines.get(i);
