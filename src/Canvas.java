@@ -21,6 +21,9 @@ public class Canvas extends JPanel implements Observer {
 	private Color drawColor;
 	private ArrayList<ArrayList<Line>> drawnLines;
 	private BasicStroke currentStroke;
+	private int lastWidth = 0;
+	private int lastHeight = 0;
+	long lastResizeEvent;
 	
 	public Canvas(Model model) {
 		this.model = model;
@@ -107,6 +110,32 @@ public class Canvas extends JPanel implements Observer {
 				g2.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
 			}
 		}	
+	}
+	
+	public void resized() {
+		if (this.lastWidth == 0 || this.lastHeight == 0) {
+			this.lastWidth = this.getWidth();
+			this.lastHeight = this.getHeight();
+		}			
+		ArrayList<ArrayList<Line>> drawnLines = model.getDrawnLines();
+		if (drawnLines != null) {
+			for (int i = 0; i < drawnLines.size(); i++) {
+				ArrayList<Line> stroke = drawnLines.get(i);
+				for (int j = 0; j < stroke.size(); j++) {
+					Line line = stroke.get(j);
+					double xPercent = (double)this.getWidth() / (double)lastWidth;
+					double yPercent = (double)this.getHeight() / (double)lastHeight;
+					line.setX1((int)((double)line.getX1() * xPercent));
+					line.setX2((int)((double)line.getX2() * xPercent));
+					line.setY1((int)((double)line.getY1() * yPercent));
+					line.setY2((int)((double)line.getY2() * yPercent));
+				}
+			}
+			model.setDrawnLines(drawnLines);
+			this.lastWidth = this.getWidth();
+			this.lastHeight = this.getHeight();
+			repaint();
+		}
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import javax.swing.JButton;
 
 public class Model extends Observable {
 	
+	private GamePanel gamePanel;
 	private ArrayList<Color> colorArray;
 	private Color currentColor;
 	private ArrayList<BasicStroke> strokeArray;
@@ -44,6 +45,14 @@ public class Model extends Observable {
 		strokeArray.add(new BasicStroke(7));
 		strokeArray.add(new BasicStroke(9));
 		currentStroke = strokeArray.get(0);
+	}
+	
+	public GamePanel getGamePanel() {
+		return gamePanel;
+	}
+
+	public void setGamePanel(GamePanel gamePanel) {
+		this.gamePanel = gamePanel;
 	}
 	
 	public ArrayList<Color> getColorArray() {
@@ -128,6 +137,10 @@ public class Model extends Observable {
 
 	public void setLastLineIndex(int lastLineIndex) {
 		this.lastLineIndex = lastLineIndex;
+	}
+	
+	public void resized() {
+		gamePanel.resized();
 	}
 	
 }
