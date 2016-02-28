@@ -34,8 +34,8 @@ public class SouthPanel extends JPanel implements Observer {
 		this.setBorder(BorderFactory.createCompoundBorder(margin, border));
 		
 		
-		JButton play = new JButton("Play");
-		play.addMouseListener(new MouseAdapter() {
+		JButton playForward = new JButton("Play (F)");
+		playForward.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int delay = 50; //milliseconds
 				ActionListener taskPerformer = new ActionListener() {
@@ -54,7 +54,29 @@ public class SouthPanel extends JPanel implements Observer {
 				sliderTimer.start();				
 			}
 		});
-		this.add(play);
+		this.add(playForward);
+		
+		JButton playBack = new JButton("Play (B)");
+		playBack.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int delay = 50; //milliseconds
+				ActionListener taskPerformer = new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						int newIndex = model.getLineIndex() - 5;
+						if (newIndex <= 0) {
+							model.setLineIndex(0);
+							sliderTimer.stop();
+						}
+						else {
+							model.setLineIndex(newIndex);
+						}
+					}
+				};
+				sliderTimer = new Timer(delay, taskPerformer);
+				sliderTimer.start();				
+			}
+		});
+		this.add(playBack);
 		
 		slider = new JSlider(JSlider.HORIZONTAL, 0, 0, 0);
 		slider.setBackground(Color.WHITE);
