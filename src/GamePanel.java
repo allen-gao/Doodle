@@ -27,9 +27,6 @@ public class GamePanel extends JPanel {
 	
 	public void resized() {
 		canvas.resized();
-	}
-	
-	public void resizedInstant() {
 		southPanel.resized();
 	}
 }

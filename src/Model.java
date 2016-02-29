@@ -146,10 +146,6 @@ public class Model extends Observable {
 	public void resized() {
 		gamePanel.resized();
 	}
-	
-	public void resizedInstant() { // whenever the event triggers
-		gamePanel.resizedInstant();
-	}
 
 	public int getLastWidth() {
 		return lastWidth;
