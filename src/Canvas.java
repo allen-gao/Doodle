@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 public class Canvas extends JPanel implements Observer {
 	
+	private Canvas canvas = this;
 	private Model model;
 	private int x;
 	private int y;
@@ -21,8 +22,6 @@ public class Canvas extends JPanel implements Observer {
 	private Color drawColor;
 	private ArrayList<ArrayList<Line>> drawnLines;
 	private BasicStroke currentStroke;
-	private int lastWidth = 0;
-	private int lastHeight = 0;
 	long lastResizeEvent;
 	
 	public Canvas(Model model) {
@@ -48,9 +47,23 @@ public class Canvas extends JPanel implements Observer {
 				y = e.getY();
 				
 				ArrayList<Line> lastList;
+				if (model.getDrawnLines() != null && (model.getLastWidth() != canvas.getWidth() || model.getLastHeight() != canvas.getHeight())) {
+					model.setLastWidth(canvas.getWidth());
+					model.setLastHeight(canvas.getHeight());
+					for (int i = 0; i < model.getDrawnLines().size(); i++) {
+						ArrayList<Line> stroke = model.getDrawnLines().get(i);
+						for (int j = 0; j < stroke.size(); j++) {
+							Line line = stroke.get(j);
+							line.setLastX1(x);
+							line.setLastX2(lastX);
+							line.setLastY1(y);
+							line.setLastY2(lastY);
+						}
+					}
+				}
 				if (model.getLineIndex() == model.getLineIndexMax()) { // no overwriting
 					lastList = drawnLines.get(drawnLines.size() - 1);
-					lastList.add(new Line(x, y, lastX, lastY, drawColor, currentStroke));
+					lastList.add(new Line(x, y, lastX, lastY, x, lastX, y, lastY, drawColor, currentStroke));
 					model.setDrawnLines(drawnLines);
 				}
 				else { // overwriting
@@ -63,8 +76,6 @@ public class Canvas extends JPanel implements Observer {
 					drawnLines.add(new ArrayList<Line>());
 					model.setDrawnLines(drawnLines);
 				}
-				
-				
 				repaint();
 			}
 			
@@ -112,28 +123,22 @@ public class Canvas extends JPanel implements Observer {
 		}	
 	}
 	
-	public void resized() {
-		if (this.lastWidth == 0 || this.lastHeight == 0) {
-			this.lastWidth = this.getWidth();
-			this.lastHeight = this.getHeight();
-		}			
+	public void resized() {		
 		ArrayList<ArrayList<Line>> drawnLines = model.getDrawnLines();
 		if (drawnLines != null) {
 			for (int i = 0; i < drawnLines.size(); i++) {
 				ArrayList<Line> stroke = drawnLines.get(i);
 				for (int j = 0; j < stroke.size(); j++) {
 					Line line = stroke.get(j);
-					double xPercent = (double)this.getWidth() / (double)lastWidth;
-					double yPercent = (double)this.getHeight() / (double)lastHeight;
-					line.setX1((int)((double)line.getX1() * xPercent));
-					line.setX2((int)((double)line.getX2() * xPercent));
-					line.setY1((int)((double)line.getY1() * yPercent));
-					line.setY2((int)((double)line.getY2() * yPercent));
+					double xPercent = (double)this.getWidth() / (double)model.getLastWidth();
+					double yPercent = (double)this.getHeight() / (double)model.getLastHeight();
+					line.setX1((int)((double)line.getLastX1() * xPercent));
+					line.setX2((int)((double)line.getLastX2() * xPercent));
+					line.setY1((int)((double)line.getLastY1() * yPercent));
+					line.setY2((int)((double)line.getLastY2() * yPercent));
 				}
 			}
 			model.setDrawnLines(drawnLines);
-			this.lastWidth = this.getWidth();
-			this.lastHeight = this.getHeight();
 			repaint();
 		}
 	}

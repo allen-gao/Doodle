@@ -20,6 +20,9 @@ public class Model extends Observable {
 	private int lastStrokeIndex;
 	private int lastLineIndex;
 	
+	private int lastWidth;
+	private int lastHeight;
+	
 	public Model() {
 		colorArray = new ArrayList<Color>(Arrays.asList(
 				Color.BLACK, 
@@ -99,9 +102,10 @@ public class Model extends Observable {
 
 	public void setDrawnLines(ArrayList<ArrayList<Line>> drawnLines) {
 		this.drawnLines = drawnLines;
+		this.lineIndex = this.drawnLines.size() * 100;
 		setChanged();
 		notifyObservers(this.drawnLines);
-		this.lineIndex = this.drawnLines.size() * 100;
+		
 	}
 
 	public int getLineIndex() {
@@ -145,6 +149,22 @@ public class Model extends Observable {
 	
 	public void resizedInstant() { // whenever the event triggers
 		gamePanel.resizedInstant();
+	}
+
+	public int getLastWidth() {
+		return lastWidth;
+	}
+
+	public void setLastWidth(int lastWidth) {
+		this.lastWidth = lastWidth;
+	}
+
+	public int getLastHeight() {
+		return lastHeight;
+	}
+
+	public void setLastHeight(int lastHeight) {
+		this.lastHeight = lastHeight;
 	}
 	
 }

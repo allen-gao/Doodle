@@ -13,7 +13,7 @@ public class Doodle extends JFrame {
 	
 	private static int width = 600;
 	private static int height = 600;
-	private static int delay = 100;
+	private static int delay = 400;
 	
 	private static GamePanel gamePanel;
 	private static Model model;
@@ -44,18 +44,7 @@ public class Doodle extends JFrame {
 				frame.addComponentListener(new ComponentAdapter() {
 					public void componentResized(ComponentEvent e) {
 						model.resizedInstant();
-						if (resizeTimer == null) {
-							ActionListener taskPerformer = new ActionListener() {
-								public void actionPerformed(ActionEvent evt) {
-									model.resized();
-									resizeTimer.stop();
-								}
-							};
-							resizeTimer = new Timer(delay, taskPerformer);
-						}
-						else if (lastResize + delay < System.currentTimeMillis()) {
-							resizeTimer.restart();
-						}
+						model.resized();
 					}
 				});
 			}
