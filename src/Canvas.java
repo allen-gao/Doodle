@@ -164,26 +164,28 @@ public class Canvas extends JPanel implements Observer {
 	public void setLargestXY() {
 		this.largestX = 0;
 		this.largestY = 0;
-		for (int i = 0; i < model.getDrawnLines().size(); i++) {
-			ArrayList<Line> stroke = model.getDrawnLines().get(i);
-			for (int j = 0; j < stroke.size(); j++) {
-				Line line = stroke.get(j);
-				if (line.getX1() > this.largestX) {
-					this.largestX = line.getX1();
-				}
-				if (line.getX2() > this.largestX) {
-					this.largestX = line.getX2();
-				}
-				if (line.getY1() > this.largestY) {
-					this.largestY = line.getY1();
-				}
-				if (line.getY2() > this.largestY) {
-					this.largestY = line.getY2();
+		if (model.getDrawnLines() != null) {
+			for (int i = 0; i < model.getDrawnLines().size(); i++) {
+				ArrayList<Line> stroke = model.getDrawnLines().get(i);
+				for (int j = 0; j < stroke.size(); j++) {
+					Line line = stroke.get(j);
+					if (line.getX1() > this.largestX) {
+						this.largestX = line.getX1();
+					}
+					if (line.getX2() > this.largestX) {
+						this.largestX = line.getX2();
+					}
+					if (line.getY1() > this.largestY) {
+						this.largestY = line.getY1();
+					}
+					if (line.getY2() > this.largestY) {
+						this.largestY = line.getY2();
+					}
 				}
 			}
+			this.setPreferredSize(new Dimension(this.largestX + this.largestOffset, this.largestY + this.largestOffset));
+			this.scrollPane.revalidate();
 		}
-		this.setPreferredSize(new Dimension(this.largestX + this.largestOffset, this.largestY + this.largestOffset));
-		this.scrollPane.revalidate();
 	}
 
 	@Override
@@ -191,10 +193,18 @@ public class Canvas extends JPanel implements Observer {
 		if (arg == "lineIndex") {
 			repaint();
 		}
-		this.drawColor = model.getCurrentColor();
-		this.currentStroke = model.getCurrentStroke();
 		if (!model.isFitWindow()) {
 			this.setLargestXY();
 		}
+		System.out.println(model.isFitWindow());
+		if (arg == "fitWindow") {
+			if (model.isFitWindow()) {
+				this.scrollPane.setPreferredSize(new Dimension(this.largestX + this.largestOffset, this.largestY + this.largestOffset));
+				repaint();
+				this.scrollPane.setPreferredSize(null);
+			}
+		}
+		this.drawColor = model.getCurrentColor();
+		this.currentStroke = model.getCurrentStroke();
 	}
 }

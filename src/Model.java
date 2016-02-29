@@ -149,6 +149,8 @@ public class Model extends Observable {
 
 	public void setFitWindow(boolean fitWindow) {
 		this.fitWindow = fitWindow;
+		setChanged();
+		notifyObservers("fitWindow");
 	}
 
 	public void resized() {

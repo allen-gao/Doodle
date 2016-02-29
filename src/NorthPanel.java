@@ -1,16 +1,19 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -50,11 +53,24 @@ public class NorthPanel extends JPanel implements Observer {
 		fileMenu.add(loadItem);
 		
 		JMenu viewMenu = new JMenu("View");
-		menuBar.add(viewMenu);
-		JMenuItem fullSizeItem = new JMenuItem("Full Size");
+		ButtonGroup buttonGroup = new ButtonGroup();
+		JRadioButtonMenuItem fullSizeItem = new JRadioButtonMenuItem(new AbstractAction("Full Size") {
+		    public void actionPerformed(ActionEvent e) {
+		    	model.setFitWindow(false);
+		    }
+		});
+		fullSizeItem.setSelected(true);
+		this.model.setFitWindow(false);
+		buttonGroup.add(fullSizeItem);
 		viewMenu.add(fullSizeItem);
-		JMenuItem fitItem = new JMenuItem("Fit Window");
+		JRadioButtonMenuItem fitItem = new JRadioButtonMenuItem(new AbstractAction("Fit Window") {
+		    public void actionPerformed(ActionEvent e) {
+		    	model.setFitWindow(true);
+		    }
+		});
+		buttonGroup.add(fitItem);
 		viewMenu.add(fitItem);
+		menuBar.add(viewMenu);
 		
 		this.add(menuBar);
 	}
