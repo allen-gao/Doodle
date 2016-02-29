@@ -28,8 +28,14 @@ public class SouthPanel extends JPanel implements Observer {
 	private int sliderButtonWidthOffset = 350;
 	private int sliderWidthDefault = defaultWindowWidth - sliderButtonWidthOffset;
 	private int sliderHeight = 40;
+	private JButton playForward;
+	private JButton playBack;
+	private JButton start;
+	private JButton end;
+	private int animateInt = 0; // 1 if forward, -1 if backward, 0 if neutral
 	
-	private Timer sliderTimer;
+	private Timer sliderTimerF;
+	private Timer sliderTimerB;
 	
 	public SouthPanel(Model model) {
 		this.model = model;
@@ -40,46 +46,56 @@ public class SouthPanel extends JPanel implements Observer {
 		this.setBorder(BorderFactory.createCompoundBorder(margin, border));
 		
 		
-		JButton playForward = new JButton("Play (F)");
+		playForward = new JButton("Play (F)");
 		playForward.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
+				animateInt = 1;
 				int delay = 50; //milliseconds
 				ActionListener taskPerformer = new ActionListener() {
 					public void actionPerformed(ActionEvent evt) {
 						int newIndex = model.getLineIndex() + 5;
-						if (model.getLineIndexMax() <= newIndex) {
+						if (animateInt != 1) {
+							sliderTimerF.stop();
+						}
+						else if (model.getLineIndexMax() <= newIndex) {
 							model.setLineIndex(model.getLineIndexMax());
-							sliderTimer.stop();
+							sliderTimerF.stop();
+							animateInt = 0;
 						}
 						else {
 							model.setLineIndex(newIndex);
 						}
 					}
 				};
-				sliderTimer = new Timer(delay, taskPerformer);
-				sliderTimer.start();				
+				sliderTimerF = new Timer(delay, taskPerformer);
+				sliderTimerF.start();				
 			}
 		});
 		this.add(playForward);
 		
-		JButton playBack = new JButton("Play (B)");
+		playBack = new JButton("Play (B)");
 		playBack.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
+				animateInt = -1;
 				int delay = 50; //milliseconds
 				ActionListener taskPerformer = new ActionListener() {
 					public void actionPerformed(ActionEvent evt) {
 						int newIndex = model.getLineIndex() - 5;
-						if (newIndex <= 0) {
+						if (animateInt != -1) {
+							sliderTimerB.stop();
+						}
+						else if (newIndex <= 0) {
 							model.setLineIndex(0);
-							sliderTimer.stop();
+							sliderTimerB.stop();
+							animateInt = 0;
 						}
 						else {
 							model.setLineIndex(newIndex);
 						}
 					}
 				};
-				sliderTimer = new Timer(delay, taskPerformer);
-				sliderTimer.start();				
+				sliderTimerB = new Timer(delay, taskPerformer);
+				sliderTimerB.start();				
 			}
 		});
 		this.add(playBack);
@@ -98,7 +114,7 @@ public class SouthPanel extends JPanel implements Observer {
 		});
 		this.add(slider);
 	
-		JButton start = new JButton("Start");
+		start = new JButton("Start");
 		start.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				model.setLineIndex(0);
@@ -106,7 +122,7 @@ public class SouthPanel extends JPanel implements Observer {
 		});
 		this.add(start);
 		
-		JButton end = new JButton("End");
+		end = new JButton("End");
 		end.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				model.setLineIndex(model.getLineIndexMax());
@@ -138,5 +154,9 @@ public class SouthPanel extends JPanel implements Observer {
 		if (arg == "lineIndex") {
 			slider.setValue(model.getLineIndex());
 		}
+		playForward.setEnabled(model.getLineIndex() != model.getLineIndexMax());
+		playBack.setEnabled(model.getLineIndex() != 0);
+		start.setEnabled(model.getLineIndex() != 0);
+		end.setEnabled(model.getLineIndex() != model.getLineIndexMax());
 	}
 }
