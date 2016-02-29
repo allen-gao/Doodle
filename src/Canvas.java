@@ -54,16 +54,16 @@ public class Canvas extends JPanel implements Observer {
 						ArrayList<Line> stroke = model.getDrawnLines().get(i);
 						for (int j = 0; j < stroke.size(); j++) {
 							Line line = stroke.get(j);
-							line.setLastX1(x);
-							line.setLastX2(lastX);
-							line.setLastY1(y);
-							line.setLastY2(lastY);
+							line.setLastX1(line.getX1());
+							line.setLastX2(line.getX2());
+							line.setLastY1(line.getY1());
+							line.setLastY2(line.getY2());
 						}
 					}
 				}
 				if (model.getLineIndex() == model.getLineIndexMax()) { // no overwriting
 					lastList = drawnLines.get(drawnLines.size() - 1);
-					lastList.add(new Line(x, y, lastX, lastY, x, lastX, y, lastY, drawColor, currentStroke));
+					lastList.add(new Line(x, y, lastX, lastY, x, y, lastX, lastY, drawColor, currentStroke));
 					model.setDrawnLines(drawnLines);
 				}
 				else { // overwriting
@@ -123,7 +123,7 @@ public class Canvas extends JPanel implements Observer {
 		}	
 	}
 	
-	public void resized() {		
+	public void resized() {
 		ArrayList<ArrayList<Line>> drawnLines = model.getDrawnLines();
 		if (drawnLines != null) {
 			for (int i = 0; i < drawnLines.size(); i++) {

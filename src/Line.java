@@ -16,7 +16,7 @@ public class Line {
 	private BasicStroke stroke;
 	
 	
-	public Line(int x1, int y1, int x2, int y2, int lastX1, int lastX2, int lastY1, int lastY2, Color color, BasicStroke stroke) {
+	public Line(int x1, int y1, int x2, int y2, int lastX1, int lastY1, int lastX2, int lastY2, Color color, BasicStroke stroke) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.x2 = x2;
