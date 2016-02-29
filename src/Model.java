@@ -1,13 +1,12 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
 
 import javax.swing.JButton;
 
-public class Model extends Observable implements Serializable {
+public class Model extends Observable {
 	
 	private GamePanel gamePanel;
 	private ArrayList<Color> colorArray;
@@ -49,6 +48,7 @@ public class Model extends Observable implements Serializable {
 		strokeArray.add(new BasicStroke(7));
 		strokeArray.add(new BasicStroke(9));
 		currentStroke = strokeArray.get(0);
+		this.drawnLines = new ArrayList<ArrayList<Line>>();
 	}
 	
 	public GamePanel getGamePanel() {

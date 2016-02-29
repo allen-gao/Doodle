@@ -24,7 +24,6 @@ public class Canvas extends JPanel implements Observer {
 	private int lastY;
 	private boolean startDraw = true;
 	private Color drawColor;
-	private ArrayList<ArrayList<Line>> drawnLines;
 	private BasicStroke currentStroke;
 	private int largestX = 0;
 	private int largestY = 0;
@@ -36,7 +35,6 @@ public class Canvas extends JPanel implements Observer {
 		this.setBackground(Color.WHITE);
 		this.drawColor = model.getCurrentColor();
 		this.currentStroke = model.getCurrentStroke();
-		this.drawnLines = new ArrayList<ArrayList<Line>>();
 		
 		MouseAdapter mouseAdapter = new MouseAdapter() {
 			public void mouseDragged(MouseEvent e) {
@@ -57,9 +55,9 @@ public class Canvas extends JPanel implements Observer {
 					updateDrawnLines();
 				}
 				if (model.getLineIndex() == model.getLineIndexMax()) { // no overwriting
-					lastList = drawnLines.get(drawnLines.size() - 1);
-					lastList.add(new Line(x, y, lastX, lastY, x, y, lastX, lastY, drawColor, currentStroke));
-					model.setDrawnLines(drawnLines);
+					lastList = model.getDrawnLines().get(model.getDrawnLines().size() - 1);
+					lastList.add(new Line(x, y, lastX, lastY, x, y, lastX, lastY, drawColor, currentStroke.getLineWidth()));
+					model.setDrawnLines(model.getDrawnLines());
 				}
 				else if (model.getLineIndex() == 0) {
 					ArrayList<ArrayList<Line>> drawnLines = model.getDrawnLines();
@@ -81,12 +79,12 @@ public class Canvas extends JPanel implements Observer {
 			}
 			
 			public void mousePressed(MouseEvent e) {
-				drawnLines.add(new ArrayList<Line>());
+				model.getDrawnLines().add(new ArrayList<Line>());
 			}
 			
 			public void mouseReleased(MouseEvent e) {
 				startDraw = true;
-				model.setDrawnLines(drawnLines);
+				model.setDrawnLines(model.getDrawnLines());
 			}
 		};
 		this.addMouseListener(mouseAdapter);
@@ -109,8 +107,8 @@ public class Canvas extends JPanel implements Observer {
 			strokeIndex -= 1;
 		}
 		int partialIndex;
-		for (int i = 0; i < strokeIndex; i++) {	
-			ArrayList<Line> lineList = drawnLines.get(i);
+		for (int i = 0; i < strokeIndex; i++) {
+			ArrayList<Line> lineList = model.getDrawnLines().get(i);
 			model.setLastStrokeIndex(i);
 			if (i != strokeIndex - 1) {
 				partialIndex = lineList.size();
@@ -122,7 +120,7 @@ public class Canvas extends JPanel implements Observer {
 				Line line = lineList.get(j);
 				model.setLastLineIndex(j);
 				g2.setColor(line.getColor());
-				g2.setStroke(line.getStroke());
+				g2.setStroke(new BasicStroke(line.getStroke()));
 				g2.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
 			}
 		}	
@@ -180,14 +178,16 @@ public class Canvas extends JPanel implements Observer {
 	public void updateDrawnLines() {
 		model.setLastWidth(canvas.getWidth());
 		model.setLastHeight(canvas.getHeight());
-		for (int i = 0; i < model.getDrawnLines().size(); i++) {
-			ArrayList<Line> stroke = model.getDrawnLines().get(i);
-			for (int j = 0; j < stroke.size(); j++) {
-				Line line = stroke.get(j);
-				line.setLastX1(line.getX1());
-				line.setLastX2(line.getX2());
-				line.setLastY1(line.getY1());
-				line.setLastY2(line.getY2());
+		if (model.getDrawnLines() != null) {
+			for (int i = 0; i < model.getDrawnLines().size(); i++) {
+				ArrayList<Line> stroke = model.getDrawnLines().get(i);
+				for (int j = 0; j < stroke.size(); j++) {
+					Line line = stroke.get(j);
+					line.setLastX1(line.getX1());
+					line.setLastX2(line.getX2());
+					line.setLastY1(line.getY1());
+					line.setLastY2(line.getY2());
+				}
 			}
 		}
 	}

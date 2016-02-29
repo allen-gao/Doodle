@@ -14,10 +14,10 @@ public class Line implements Serializable {
 	private int lastY2;
 	
 	private Color color;
-	private BasicStroke stroke;
+	private float stroke;
 	
 	
-	public Line(int x1, int y1, int x2, int y2, int lastX1, int lastY1, int lastX2, int lastY2, Color color, BasicStroke stroke) {
+	public Line(int x1, int y1, int x2, int y2, int lastX1, int lastY1, int lastX2, int lastY2, Color color, float stroke) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.x2 = x2;
@@ -62,11 +62,11 @@ public class Line implements Serializable {
 		this.color = color;
 	}
 
-	public BasicStroke getStroke() {
+	public float getStroke() {
 		return stroke;
 	}
 
-	public void setStroke(BasicStroke stroke) {
+	public void setStroke(float stroke) {
 		this.stroke = stroke;
 	}
 

@@ -50,32 +50,33 @@ public class NorthPanel extends JPanel implements Observer {
 		    public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
 				FileNameExtensionFilter filter = new FileNameExtensionFilter(
-						"JPG & GIF Images", "jpg", "gif");
+						"Plain Text and Binaries", "bin", "txt");
 				chooser.setFileFilter(filter);
 				
 				int returnVal = chooser.showOpenDialog(chooser);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
-					System.out.println(chooser.getSelectedFile());
-					
 					BinaryModel bin = null;
-				      try
-				      {
-				         FileInputStream fileIn = new FileInputStream(chooser.getSelectedFile());
-				         ObjectInputStream in = new ObjectInputStream(fileIn);
-				         bin = (BinaryModel) in.readObject();
-				         in.close();
-				         fileIn.close();
-				      }catch(IOException i)
-				      {
-				         i.printStackTrace();
-				         return;
-				      }catch(ClassNotFoundException c)
-				      {
-				         System.out.println("Employee class not found");
-				         c.printStackTrace();
-				         return;
-				      }
+					try {
+						FileInputStream fileIn = new FileInputStream(chooser.getSelectedFile());
+						ObjectInputStream in = new ObjectInputStream(fileIn);
+						bin = (BinaryModel) in.readObject();
+						in.close();
+						fileIn.close();
+					} catch(IOException i) {
+						i.printStackTrace();
+						return;
+					} catch(ClassNotFoundException c) {
+						System.out.println("Employee class not found");
+						c.printStackTrace();
+						return;
+					}
+					model.setDrawnLines(bin.drawnLines);
+					model.setLineIndexMax(bin.lineIndexMax);
+					model.setLineIndex(bin.lineIndex);
+					model.setLastLineIndex(bin.lastLineIndex);
+					model.setFitWindow(bin.fitWindow);
+					model.setLastWidth(bin.lastWidth);
+					model.setLastHeight(bin.lastHeight);
 				}
 		    }
 		});
@@ -111,19 +112,31 @@ public class NorthPanel extends JPanel implements Observer {
 	public void saveModel() {
 		BinaryModel bin = new BinaryModel();
 		bin.drawnLines = model.getDrawnLines();
-		 try
-	      {
-	         FileOutputStream fileOut =
-	         new FileOutputStream("C:/data/employee.ser");
-	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
-	         out.writeObject(bin);
-	         out.close();
-	         fileOut.close();
-	         System.out.printf("Serialized data is saved in /tmp/employee.ser");
-	      }catch(IOException i)
-	      {
-	          i.printStackTrace();
-	      }
+		bin.lineIndex = model.getLineIndex();
+		bin.lineIndexMax = model.getLineIndexMax();
+		bin.lastLineIndex = model.getLastLineIndex();
+		bin.fitWindow = model.isFitWindow();
+		bin.lastWidth = model.getLastWidth();
+		bin.lastHeight = model.getLastHeight();
+		
+		JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				"Plain Text and Binaries", "bin", "txt");
+		chooser.setFileFilter(filter);
+		
+		int returnVal = chooser.showSaveDialog(chooser);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			try {
+				FileOutputStream fileOut = new FileOutputStream(chooser.getSelectedFile().getAbsolutePath());
+				ObjectOutputStream out = new ObjectOutputStream(fileOut);
+				out.writeObject(bin);
+				out.close();
+				fileOut.close();
+				System.out.printf("Serialized data is saved in" + chooser.getSelectedFile().getAbsolutePath());
+			} catch(IOException i) {
+				i.printStackTrace();
+			}
+		}
 	}
 	
 	public void paintComponent(Graphics g) {
