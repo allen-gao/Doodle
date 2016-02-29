@@ -54,18 +54,7 @@ public class Canvas extends JPanel implements Observer {
 				
 				ArrayList<Line> lastList;
 				if (model.isFitWindow() && model.getDrawnLines() != null && (model.getLastWidth() != canvas.getWidth() || model.getLastHeight() != canvas.getHeight())) {
-					model.setLastWidth(canvas.getWidth());
-					model.setLastHeight(canvas.getHeight());
-					for (int i = 0; i < model.getDrawnLines().size(); i++) {
-						ArrayList<Line> stroke = model.getDrawnLines().get(i);
-						for (int j = 0; j < stroke.size(); j++) {
-							Line line = stroke.get(j);
-							line.setLastX1(line.getX1());
-							line.setLastX2(line.getX2());
-							line.setLastY1(line.getY1());
-							line.setLastY2(line.getY2());
-						}
-					}
+					updateDrawnLines();
 				}
 				if (model.getLineIndex() == model.getLineIndexMax()) { // no overwriting
 					lastList = drawnLines.get(drawnLines.size() - 1);
@@ -187,6 +176,21 @@ public class Canvas extends JPanel implements Observer {
 			this.scrollPane.revalidate();
 		}
 	}
+	
+	public void updateDrawnLines() {
+		model.setLastWidth(canvas.getWidth());
+		model.setLastHeight(canvas.getHeight());
+		for (int i = 0; i < model.getDrawnLines().size(); i++) {
+			ArrayList<Line> stroke = model.getDrawnLines().get(i);
+			for (int j = 0; j < stroke.size(); j++) {
+				Line line = stroke.get(j);
+				line.setLastX1(line.getX1());
+				line.setLastX2(line.getX2());
+				line.setLastY1(line.getY1());
+				line.setLastY2(line.getY2());
+			}
+		}
+	}
 
 	@Override
 	public void update(Observable o, Object arg) {
@@ -198,10 +202,11 @@ public class Canvas extends JPanel implements Observer {
 		}
 		System.out.println(model.isFitWindow());
 		if (arg == "fitWindow") {
+			this.updateDrawnLines();
 			if (model.isFitWindow()) {
-				this.scrollPane.setPreferredSize(new Dimension(this.largestX + this.largestOffset, this.largestY + this.largestOffset));
-				repaint();
-				this.scrollPane.setPreferredSize(null);
+				this.setPreferredSize(null);
+				this.scrollPane.revalidate();
+				
 			}
 		}
 		this.drawColor = model.getCurrentColor();
