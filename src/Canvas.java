@@ -66,6 +66,12 @@ public class Canvas extends JPanel implements Observer {
 					lastList.add(new Line(x, y, lastX, lastY, x, y, lastX, lastY, drawColor, currentStroke));
 					model.setDrawnLines(drawnLines);
 				}
+				else if (model.getLineIndex() == 0) {
+					ArrayList<ArrayList<Line>> drawnLines = model.getDrawnLines();
+					drawnLines.subList(0, drawnLines.size()).clear();
+					drawnLines.add(new ArrayList<Line>());
+					model.setDrawnLines(drawnLines);
+				}
 				else { // overwriting
 					int strokeIndex = model.getLastStrokeIndex();
 					int lineIndex = model.getLastLineIndex();
