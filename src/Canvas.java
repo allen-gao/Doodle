@@ -162,9 +162,9 @@ public class Canvas extends JPanel implements Observer {
 	}
 	
 	public void setLargestXY() {
+		this.largestX = 0;
+		this.largestY = 0;
 		for (int i = 0; i < model.getDrawnLines().size(); i++) {
-			this.largestX = 0;
-			this.largestY = 0;
 			ArrayList<Line> stroke = model.getDrawnLines().get(i);
 			for (int j = 0; j < stroke.size(); j++) {
 				Line line = stroke.get(j);
