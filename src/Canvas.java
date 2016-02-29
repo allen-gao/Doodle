@@ -1,5 +1,6 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
@@ -9,11 +10,14 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 public class Canvas extends JPanel implements Observer {
 	
 	private Canvas canvas = this;
+	
 	private Model model;
+	private JScrollPane scrollPane;
 	private int x;
 	private int y;
 	private int lastX;
@@ -22,7 +26,9 @@ public class Canvas extends JPanel implements Observer {
 	private Color drawColor;
 	private ArrayList<ArrayList<Line>> drawnLines;
 	private BasicStroke currentStroke;
-	long lastResizeEvent;
+	private int largestX = 0;
+	private int largestY = 0;
+	private int largestOffset = 50;
 	
 	public Canvas(Model model) {
 		this.model = model;
@@ -47,7 +53,7 @@ public class Canvas extends JPanel implements Observer {
 				y = e.getY();
 				
 				ArrayList<Line> lastList;
-				if (model.getDrawnLines() != null && (model.getLastWidth() != canvas.getWidth() || model.getLastHeight() != canvas.getHeight())) {
+				if (model.isFitWindow() && model.getDrawnLines() != null && (model.getLastWidth() != canvas.getWidth() || model.getLastHeight() != canvas.getHeight())) {
 					model.setLastWidth(canvas.getWidth());
 					model.setLastHeight(canvas.getHeight());
 					for (int i = 0; i < model.getDrawnLines().size(); i++) {
@@ -97,6 +103,10 @@ public class Canvas extends JPanel implements Observer {
 		this.addMouseListener(mouseAdapter);
 		this.addMouseMotionListener(mouseAdapter);
 	}
+
+	public void setScrollPane(JScrollPane scrollPane) {
+		this.scrollPane = scrollPane;
+	}
 	
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
@@ -130,23 +140,50 @@ public class Canvas extends JPanel implements Observer {
 	}
 	
 	public void resized() {
-		ArrayList<ArrayList<Line>> drawnLines = model.getDrawnLines();
-		if (drawnLines != null) {
-			for (int i = 0; i < drawnLines.size(); i++) {
-				ArrayList<Line> stroke = drawnLines.get(i);
-				for (int j = 0; j < stroke.size(); j++) {
-					Line line = stroke.get(j);
-					double xPercent = (double)this.getWidth() / (double)model.getLastWidth();
-					double yPercent = (double)this.getHeight() / (double)model.getLastHeight();
-					line.setX1((int)((double)line.getLastX1() * xPercent));
-					line.setX2((int)((double)line.getLastX2() * xPercent));
-					line.setY1((int)((double)line.getLastY1() * yPercent));
-					line.setY2((int)((double)line.getLastY2() * yPercent));
+		if (model.isFitWindow()) {
+			ArrayList<ArrayList<Line>> drawnLines = model.getDrawnLines();
+			if (drawnLines != null) {
+				for (int i = 0; i < drawnLines.size(); i++) {
+					ArrayList<Line> stroke = drawnLines.get(i);
+					for (int j = 0; j < stroke.size(); j++) {
+						Line line = stroke.get(j);
+						double xPercent = (double)this.getWidth() / (double)model.getLastWidth();
+						double yPercent = (double)this.getHeight() / (double)model.getLastHeight();
+						line.setX1((int)((double)line.getLastX1() * xPercent));
+						line.setX2((int)((double)line.getLastX2() * xPercent));
+						line.setY1((int)((double)line.getLastY1() * yPercent));
+						line.setY2((int)((double)line.getLastY2() * yPercent));
+					}
+				}
+				model.setDrawnLines(drawnLines);
+				repaint();
+			}
+		}
+	}
+	
+	public void setLargestXY() {
+		for (int i = 0; i < model.getDrawnLines().size(); i++) {
+			this.largestX = 0;
+			this.largestY = 0;
+			ArrayList<Line> stroke = model.getDrawnLines().get(i);
+			for (int j = 0; j < stroke.size(); j++) {
+				Line line = stroke.get(j);
+				if (line.getX1() > this.largestX) {
+					this.largestX = line.getX1();
+				}
+				if (line.getX2() > this.largestX) {
+					this.largestX = line.getX2();
+				}
+				if (line.getY1() > this.largestY) {
+					this.largestY = line.getY1();
+				}
+				if (line.getY2() > this.largestY) {
+					this.largestY = line.getY2();
 				}
 			}
-			model.setDrawnLines(drawnLines);
-			repaint();
 		}
+		this.setPreferredSize(new Dimension(this.largestX + this.largestOffset, this.largestY + this.largestOffset));
+		this.scrollPane.revalidate();
 	}
 
 	@Override
@@ -156,5 +193,8 @@ public class Canvas extends JPanel implements Observer {
 		}
 		this.drawColor = model.getCurrentColor();
 		this.currentStroke = model.getCurrentStroke();
+		if (!model.isFitWindow()) {
+			this.setLargestXY();
+		}
 	}
 }

@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 public class GamePanel extends JPanel {
 	
@@ -17,12 +18,13 @@ public class GamePanel extends JPanel {
 		westPanel = new WestPanel(model);
 		northPanel = new NorthPanel(model);
 		canvas = new Canvas(model);
-		
+		JScrollPane scrollPane = new JScrollPane(canvas);
+		canvas.setScrollPane(scrollPane);
 		this.setLayout(new BorderLayout());
 		this.add(southPanel, BorderLayout.SOUTH);
 		this.add(westPanel, BorderLayout.WEST);
 		this.add(northPanel, BorderLayout.NORTH);
-		this.add(canvas, BorderLayout.CENTER);
+		this.add(scrollPane, BorderLayout.CENTER);
 	}
 	
 	public void resized() {

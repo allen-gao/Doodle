@@ -19,7 +19,7 @@ public class Model extends Observable {
 	private int lineIndexMax;
 	private int lastStrokeIndex;
 	private int lastLineIndex;
-	
+	private boolean fitWindow = false;
 	private int lastWidth;
 	private int lastHeight;
 	
@@ -143,6 +143,14 @@ public class Model extends Observable {
 		this.lastLineIndex = lastLineIndex;
 	}
 	
+	public boolean isFitWindow() {
+		return fitWindow;
+	}
+
+	public void setFitWindow(boolean fitWindow) {
+		this.fitWindow = fitWindow;
+	}
+
 	public void resized() {
 		gamePanel.resized();
 	}
