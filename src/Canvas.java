@@ -200,7 +200,6 @@ public class Canvas extends JPanel implements Observer {
 		if (!model.isFitWindow()) {
 			this.setLargestXY();
 		}
-		System.out.println(model.isFitWindow());
 		if (arg == "fitWindow") {
 			this.updateDrawnLines();
 			if (model.isFitWindow()) {

@@ -1,7 +1,7 @@
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -30,10 +30,10 @@ public class NorthPanel extends JPanel implements Observer {
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
 		Border margin = new EmptyBorder(0, 0, 2, 0);
 		this.setBorder(BorderFactory.createCompoundBorder(margin, border));
+		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		menuBar = new JMenuBar();
-		
-		JMenu fileMenu = new JMenu("File");
+		JMenu fileMenu = new JMenu("File");		
 		menuBar.add(fileMenu);
 		JMenuItem saveItem = new JMenuItem("Save");
 		fileMenu.add(saveItem);
@@ -51,6 +51,10 @@ public class NorthPanel extends JPanel implements Observer {
 		    }
 		});
 		fileMenu.add(loadItem);
+		
+		JMenu space = new JMenu("");
+		space.setEnabled(false);
+		menuBar.add(space);
 		
 		JMenu viewMenu = new JMenu("View");
 		ButtonGroup buttonGroup = new ButtonGroup();
