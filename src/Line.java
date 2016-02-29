@@ -1,7 +1,8 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.io.Serializable;
 
-public class Line {
+public class Line implements Serializable {
 	private int x1;
 	private int x2;
 	private int y1;

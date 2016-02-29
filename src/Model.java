@@ -1,12 +1,13 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
 
 import javax.swing.JButton;
 
-public class Model extends Observable {
+public class Model extends Observable implements Serializable {
 	
 	private GamePanel gamePanel;
 	private ArrayList<Color> colorArray;

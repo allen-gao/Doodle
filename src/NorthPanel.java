@@ -2,6 +2,11 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -35,7 +40,11 @@ public class NorthPanel extends JPanel implements Observer {
 		menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");		
 		menuBar.add(fileMenu);
-		JMenuItem saveItem = new JMenuItem("Save");
+		JMenuItem saveItem = new JMenuItem(new AbstractAction("Save") {
+		    public void actionPerformed(ActionEvent e) {
+		    	saveModel();
+		    }
+		});
 		fileMenu.add(saveItem);
 		JMenuItem loadItem = new JMenuItem(new AbstractAction("Load") {
 		    public void actionPerformed(ActionEvent e) {
@@ -47,6 +56,26 @@ public class NorthPanel extends JPanel implements Observer {
 				int returnVal = chooser.showOpenDialog(chooser);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
+					System.out.println(chooser.getSelectedFile());
+					
+					BinaryModel bin = null;
+				      try
+				      {
+				         FileInputStream fileIn = new FileInputStream(chooser.getSelectedFile());
+				         ObjectInputStream in = new ObjectInputStream(fileIn);
+				         bin = (BinaryModel) in.readObject();
+				         in.close();
+				         fileIn.close();
+				      }catch(IOException i)
+				      {
+				         i.printStackTrace();
+				         return;
+				      }catch(ClassNotFoundException c)
+				      {
+				         System.out.println("Employee class not found");
+				         c.printStackTrace();
+				         return;
+				      }
 				}
 		    }
 		});
@@ -77,6 +106,24 @@ public class NorthPanel extends JPanel implements Observer {
 		menuBar.add(viewMenu);
 		
 		this.add(menuBar);
+	}
+	
+	public void saveModel() {
+		BinaryModel bin = new BinaryModel();
+		bin.drawnLines = model.getDrawnLines();
+		 try
+	      {
+	         FileOutputStream fileOut =
+	         new FileOutputStream("C:/data/employee.ser");
+	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+	         out.writeObject(bin);
+	         out.close();
+	         fileOut.close();
+	         System.out.printf("Serialized data is saved in /tmp/employee.ser");
+	      }catch(IOException i)
+	      {
+	          i.printStackTrace();
+	      }
 	}
 	
 	public void paintComponent(Graphics g) {
